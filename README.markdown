@@ -24,13 +24,13 @@ Puppet 2.6.7 or higher.
 
 Before you begin, you must add the RVM module to your Puppet installation.  This can be done with:
 
-  $ git clone git://github.com/blt04/puppet-rvm.git /etc/puppet/modules/rvm
+    $ git clone git://github.com/blt04/puppet-rvm.git /etc/puppet/modules/rvm
 
 Enable plugin synchronization for custom types.  In your puppet.conf (usually in /etc/puppet)
 on both the Master and Client ensure you have:
 
-  [main]
-    pluginsync = true
+    [main]
+      pluginsync = true
 
 You may now continue configuring RVM resources.
 
@@ -39,34 +39,34 @@ You may now continue configuring RVM resources.
 
 Install RVM with:
 
-  include rvm::system
+    include rvm::system
 
 This will install RVM into `/usr/local/rvm`.
 
 To use RVM without sudo, users need to be added to the `rvm` group.  This can be easily done with:
 
-  rvm::system::user { [ 'bturner', 'jdoe', 'jsmith' ]: }
+    rvm::system::user { [ 'bturner', 'jdoe', 'jsmith' ]: }
   
 Note that by default, rvm::system::user with autorequire the matching User resource (http://docs.puppetlabs.com/references/stable/type.html#user-3). If you want to avoid this (i.e. a system user or unmanaged user) you can do:
 
-  rvm::system::user { 'www-data':
-    unmanaged_user => true,
-  }
+    rvm::system::user { 'www-data':
+      unmanaged_user => true,
+    }
 
 
 ## Installing Ruby
 
 You can tell RVM to install one or more Ruby versions with:
 
-  rvm::system::ruby { 'ruby-1.9.2-p180':
-    ensure      => 'present',
-    default_use => true,
-  }
+    rvm::system::ruby { 'ruby-1.9.2-p180':
+      ensure      => 'present',
+      default_use => true,
+    }
 
-  rvm::system::ruby { 'ruby-1.8.7-p334':
-    ensure      => 'present',
-    default_use => false,
-  }
+    rvm::system::ruby { 'ruby-1.8.7-p334':
+      ensure      => 'present',
+      default_use => false,
+    }
 
 You should use the full version number.  While the shorthand version may work (e.g. '1.9.2'), the provider will be unable to detect if the correct version is installed.
 
@@ -82,56 +82,56 @@ Install a gem with:
 
 Sometimes you need to install the same gem for multiple rubies:
 
-  rvm::gem { 'bundler192':
-    gem_name     => 'bundler',
-    ensure       => '1.0.13',
-    ruby_version => 'ruby-1.9.2-p180',
-  }
+    rvm::gem { 'bundler192':
+      gem_name     => 'bundler',
+      ensure       => '1.0.13',
+      ruby_version => 'ruby-1.9.2-p180',
+    }
 
-  rvm::gem { 'bundler187':
-    gem_name     => 'bundler',
-    ensure       => '1.0.13',
-    ruby_version => 'ruby-1.8.7-p334',
-  }
+    rvm::gem { 'bundler187':
+      gem_name     => 'bundler',
+      ensure       => '1.0.13',
+      ruby_version => 'ruby-1.8.7-p334',
+    }
 
 Alternatively, you can use this less verbose, but slightly uglier syntax:
 
-  if $rvm_installed == "true" {
-    rvm_gem { 'ruby-1.9.2-p180/bundler':
-      ensure  => '1.0.13',
-      require => Rvm_system_ruby['ruby-1.9.2-p180'],
-    }
+    if $rvm_installed == "true" {
+      rvm_gem { 'ruby-1.9.2-p180/bundler':
+        ensure  => '1.0.13',
+        require => Rvm_system_ruby['ruby-1.9.2-p180'],
+      }
 
-    rvm_gem { 'ruby-1.8.7-p334/bundler':
-      ensure  => '1.0.13',
-      require => Rvm_system_ruby['ruby-1.8.7-p334'],
+      rvm_gem { 'ruby-1.8.7-p334/bundler':
+        ensure  => '1.0.13',
+        require => Rvm_system_ruby['ruby-1.8.7-p334'],
+      }
     }
-  }
 
 
 ## Creating Gemsets
 
 Create a gemset with:
 
-  rvm::gemset { 'ruby-1.9.2-p290/myproject':
-    ensure => present,
-  }
+    rvm::gemset { 'ruby-1.9.2-p290/myproject':
+      ensure => present,
+    }
 
 
 ## Installing Passenger
 
 Install passenger with:
 
-  if $rvm_installed == "true" {
-    class { 'rvm::passenger::apache':
-      version            => '3.0.7',
-      ruby_version       => 'ruby-1.9.2-p180',
-      mininstances       => '3',
-      maxinstancesperapp => '0',
-      maxpoolsize        => '30',
-      spawnmethod        => 'smart-lv2';
+    if $rvm_installed == "true" {
+      class { 'rvm::passenger::apache':
+        version            => '3.0.7',
+        ruby_version       => 'ruby-1.9.2-p180',
+        mininstances       => '3',
+        maxinstancesperapp => '0',
+        maxpoolsize        => '30',
+        spawnmethod        => 'smart-lv2';
+      }
     }
-  }
 
 
 ## Troubleshooting / FAQ
@@ -140,9 +140,9 @@ Install passenger with:
 
 This means that puppet cannot find the `/usr/local/rvm/bin/rvm` command.  Currently, Puppet does not support making a provider suitable using another resource (late-binding).  You can avoid this error by surrounding your rvm configuration in an if block:
 
-  if $rvm_installed == "true" {
-    rvm_system_ruby ...
-  }
+    if $rvm_installed == "true" {
+      rvm_system_ruby ...
+    }
 
 Do not surround `include rvm::system` in the if block, as this is used to install RVM.
 
@@ -170,11 +170,11 @@ The puppet [package](http://docs.puppetlabs.com/references/latest/type.html#pack
 type seems like an obvious place for the RVM provider.  It would be nice if the syntax
 for installing Ruby with RVM looked like:
 
-  # NOTE: This does not work
-  package {'ruby':
-    provider => 'rvm',
-    ensure   => '1.9.2-p180',
-  }
+    # NOTE: This does not work
+    package {'ruby':
+      provider => 'rvm',
+      ensure   => '1.9.2-p180',
+    }
 
 While this may be possible, it becomes harder to manage multiple Ruby versions and
 nearly impossible to install gems for a specific Ruby version.  For this reason,
