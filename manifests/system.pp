@@ -1,6 +1,6 @@
 class rvm::system($version='latest') {
   require rvm::params
-  include rvm::dependencies
+  require rvm::dependencies
 
   exec { 'system-rvm':
     path    => '/usr/bin:/usr/sbin:/bin',
