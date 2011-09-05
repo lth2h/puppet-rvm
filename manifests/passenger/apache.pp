@@ -1,4 +1,4 @@
-class rvm::passenger::apache(
+class rvm::passenger::apache (
   $ruby_version,
   $version,
   $rvm_prefix = '/usr/local/',

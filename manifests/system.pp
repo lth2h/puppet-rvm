@@ -1,5 +1,8 @@
-class rvm::system($version='latest') {
-  require rvm::params
+class rvm::system (
+  $version      = $rvm::params::version,
+  $trust_rvmrcs = $rvm::params::trust_rvmrcs
+) inherits rvm::params {
+
   require rvm::dependencies
 
   exec { 'system-rvm':
@@ -9,7 +12,7 @@ class rvm::system($version='latest') {
     require => Class['rvm::dependencies'],
   }
   
-  if $rvm_installed == 'true' and $rvm::params::trust_rvmrcs {
+  if $rvm_installed == 'true' and $trust_rvmrcs {
     common::line { 'trust-rvmrcs':
       ensure => present,
       file   => '/etc/rvmrc',

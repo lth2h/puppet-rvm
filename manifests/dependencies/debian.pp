@@ -1,3 +1,3 @@
 class rvm::dependencies::debian {
-  require buildenv::packages::sqlite
+  require buildenv::libs::sqlite
 }

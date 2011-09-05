@@ -1,10 +1,10 @@
 class rvm::dependencies::redhat {
-  require buildenv::packages::libffi
-  require buildenv::packages::patch
+  require buildenv::libs::ffi
+  require buildenv::tools::patch
 
   if ! defined(Package['bzip2']) {
 	  package { 'bzip2':
-	    ensure => installed,
+	    ensure => latest,
 	  }
 	}
 }

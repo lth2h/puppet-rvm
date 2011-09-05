@@ -75,10 +75,10 @@ You should use the full version number.  While the shorthand version may work (e
 
 Install a gem with:
 
-  rvm::gem { 'bundler':
-    ensure       => '1.0.13',
-    ruby_version => 'ruby-1.9.2-p180',
-  }
+    rvm::gem { 'bundler':
+      ensure       => '1.0.13',
+      ruby_version => 'ruby-1.9.2-p180',
+    }
 
 Sometimes you need to install the same gem for multiple rubies:
 

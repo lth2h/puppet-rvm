@@ -14,7 +14,7 @@ define rvm::rvmrc (
     case $ensure {
       'present': {
         exec { "Create rvmrc ${ruby_version}@${name} in ${path}":
-          command => "/usr/local/rvm/bin/rvm --rvmrc --create ${ruby_version}@${gemset}",
+          command => "/usr/local/rvm/bin/rvm --rvmrc --create ${ruby_version}@${name}",
           cwd     => $path,
           creates => "${path}/.rvmrc",
           user    => $user,
@@ -22,17 +22,22 @@ define rvm::rvmrc (
           require => Rvm::System::Ruby[$ruby_version],
         }
         
-        exec { "Trust rvmrc ${ruby_version}@${name} in ${path}":
-          command     => "/usr/local/rvm/bin/rvm rvmrc trust",
-          cwd         => $path,
-          refreshonly => true,
-          user        => $user,
+        if $trust {
+          exec { "Trust rvmrc ${ruby_version}@${name} in ${path}":
+            command     => "/usr/local/rvm/bin/rvm rvmrc trust",
+            cwd         => $path,
+            refreshonly => true,
+            user        => $user,
+          }
         }
       }
       'absent': {
         file { "${path}/.rvmrc":
           ensure => absent,
         }
+      }
+      default: {
+        fail "Unknown ensure value ${ensure} in module 'rvm'. Known values are 'present|absent"
       }
     }
   } else {
