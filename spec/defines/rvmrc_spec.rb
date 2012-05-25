@@ -6,7 +6,25 @@ describe 'rvm::rvmrc', :type => :define do
   describe 'define with no parameters' do
 		it "should throw an error about the missing path parameter" do
 			expect { should contain_rvm__rvmrc('test') }\
+				.to raise_error(Puppet::Error, /Must pass ruby_version/)
+		end
+  end
+
+  describe 'define with no path' do
+    let(:params) { { :ruby_version => '1.8.7' } }
+    
+		it "should throw an error about the missing path parameter" do
+			expect { should contain_rvm__rvmrc('test') }\
 				.to raise_error(Puppet::Error, /Must pass path/)
+		end
+  end
+
+  describe 'define with no ruby_version' do
+    let(:params) { { :path => '/tmp/rvm' } }
+    
+		it "should throw an error about the missing path parameter" do
+			expect { should contain_rvm__rvmrc('test') }\
+				.to raise_error(Puppet::Error, /Must pass ruby_version/)
 		end
   end
   
