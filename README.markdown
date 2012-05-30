@@ -26,6 +26,10 @@ Before you begin, you must add the RVM module to your Puppet installation.  This
 
     $ git clone git://github.com/blt04/puppet-rvm.git /etc/puppet/modules/rvm
 
+What I actually did was:
+
+    $ git clone git://github.com/vurbia/puppet-rvm.git /etc/puppet/modules/rvm
+
 Enable plugin synchronization for custom types.  In your puppet.conf (usually in /etc/puppet)
 on both the Master and Client ensure you have:
 
